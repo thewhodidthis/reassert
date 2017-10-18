@@ -1,1 +1,1 @@
-> Browser freindly tapification
+> Browser friendly tapification
