@@ -87,14 +87,14 @@ export const bill = (code) => {
 // Tapify asserts
 export const tape = (jack = (() => {}), size = jack.length) => (...args) => {
   // Attempt at extracting a description for given assert
-  const idx1 = Math.max(size - 1, 0)
-  const temp = args[idx1]
-  const name = temp && idx1 < args.length ? temp : jack.name
+  const nameIndex = Math.max(size - 1, 0)
+  const nameMaybe = args[nameIndex]
+  const name = nameMaybe && nameIndex < args.length ? nameMaybe : jack.name
   const next = tick(name)
 
   // Name test case using first argument past description
-  const idx2 = idx1 + 1
-  const head = idx1 && args.length > idx2 ? args[idx2] : false
+  const headIndex = nameIndex + 1
+  const head = nameIndex && args.length > headIndex ? args[headIndex] : false
 
   // Always
   boot(head)
