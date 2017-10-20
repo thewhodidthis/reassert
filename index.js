@@ -37,7 +37,7 @@ const line = (title, x) => {
   echo(`${x ? 'not ' : ''}ok %d - %s`, tests, title);
 
   // Pretty print exceptions
-  if (typeof x === 'object') {
+  if (x.stack !== undefined) {
     // In order of appearance
     const cargo = ['operator', 'expected', 'actual']
       // Drop empty keys
@@ -91,14 +91,12 @@ const bill = (code) => {
 // Tapify asserts
 const tape = (jack = (() => {}), size = jack.length) => (...args) => {
   // Attempt at extracting a description for given assert
-  const nameIndex = Math.max(size - 1, 0);
-  const nameMaybe = args[nameIndex];
-  const name = nameMaybe && nameIndex < args.length ? nameMaybe : jack.name;
+  const mark = Math.max(size - 1, 0);
+  const name = (mark < args.length && args[mark]) || jack.name;
   const next = tick(name);
 
   // Name test case using first argument past description
-  const headIndex = nameIndex + 1;
-  const head = nameIndex && args.length > headIndex ? args[headIndex] : false;
+  const head = size < args.length && mark && args[size];
 
   // Always
   boot(head);
