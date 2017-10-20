@@ -1,7 +1,7 @@
 const { ok } = require('assert')
 const { tape, bill } = require('./')
 
-process.on('beforeExit', bill)
+process.on('exit', bill)
 
 const test = tape(ok)
 
