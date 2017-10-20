@@ -16,7 +16,9 @@
     "prentest": "eslint test.js",
     "test": "node test",
     "prestart": "eslint index.mjs",
-    "start": "rollup -f cjs index.mjs > index.js"
+    "start": "rollup -f cjs index.mjs > index.js",
+    "preexample": "eslint example.js",
+    "example": "node example"
   },
   "eslintConfig": {
     "extends": "@thewhodidthis"
