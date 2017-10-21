@@ -13,7 +13,7 @@
     "url": "https://github.com/thewhodidthis/tapeling/issues"
   },
   "scripts": {
-    "prentest": "eslint test.js",
+    "pretest": "eslint test.js",
     "test": "node test",
     "prestart": "eslint index.mjs",
     "start": "rollup -f cjs index.mjs > index.js",
