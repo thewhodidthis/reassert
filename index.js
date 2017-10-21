@@ -41,7 +41,7 @@ const line = (title, x) => {
     // In order of appearance
     const cargo = ['operator', 'expected', 'actual']
       // Drop empty keys
-      .filter(k => (x[k] !== undefined ? k : false))
+      /* .filter(k => (x[k] !== undefined ? k : false)) */
       // Prep contents incl. objects
       .map(k => `${k}: ${stringify(x[k])}`);
 
@@ -51,14 +51,6 @@ const line = (title, x) => {
 
     echo(block);
   }
-};
-
-// Set stats, present outcome
-const tick = tag => (x) => {
-  gains += x ? 0 : 1;
-  tests += 1;
-
-  line(tag, x);
 };
 
 const stat = () => ({ tests, gains, flops: tests ? tests - gains : 1 });
@@ -88,11 +80,21 @@ const bill = (code) => {
   }
 };
 
+// Set stats, present outcome
+const tick = tag => (x) => {
+  gains += x ? 0 : 1;
+  tests += 1;
+
+  line(tag, x);
+
+  return !x
+};
+
 // Tapify asserts
-const tape = (jack = (() => {}), size = jack.length) => (...args) => {
+const tape = (jack = v => v, size = jack && jack.length) => (...args) => {
   // Attempt at extracting a description for given assert
   const mark = Math.max(size - 1, 0);
-  const name = (mark < args.length && args[mark]) || jack.name;
+  const name = mark < args.length ? args[mark] : jack.name;
   const next = tick(name);
 
   // Name test case using first argument past description
@@ -108,7 +110,7 @@ const tape = (jack = (() => {}), size = jack.length) => (...args) => {
     jack(...args);
   } catch (e) { notOk = e; }
 
-  next(notOk);
+  return next(notOk)
 };
 
 exports.stat = stat;
