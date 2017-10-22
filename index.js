@@ -19,37 +19,15 @@ let asleep = true;
 const snap = t => `  ${t}`;
 
 // Start here
-const boot = (title) => {
+const boot = (head) => {
   // Let first run carry the banner
-  if (asleep && !tests) {
+  if (!tests && asleep) {
     asleep = echo('TAP version 13');
   }
 
   // Prepend test title if need be
-  if (title) {
-    echo('# %s', title);
-  }
-};
-
-// Log results for each assert
-const line = (title, x) => {
-  // Hit or miss
-  echo(`${x ? 'not ' : ''}ok %d - %s`, tests, title);
-
-  // Pretty print exceptions
-  if (x.stack !== undefined) {
-    // In order of appearance
-    const cargo = ['operator', 'expected', 'actual']
-      // Drop empty keys
-      /* .filter(k => (x[k] !== undefined ? k : false)) */
-      // Prep contents incl. objects
-      .map(k => `${k}: ${stringify(x[k])}`);
-
-    // Reformat stack trace, pull everything together
-    const stack = x.stack.split('\n').map(snap);
-    const block = ['---', ...cargo, 'stack:', ...stack, '...'].map(snap).join('\n');
-
-    echo(block);
+  if (head) {
+    echo('# %s', head);
   }
 };
 
@@ -80,22 +58,51 @@ const bill = (code) => {
   }
 };
 
+// Log results for each assert
+const roll = (hint, lost) => {
+  // Hit or miss
+  echo(`${lost ? 'not ' : ''}ok %d - %s`, tests, hint);
+};
+
+// Pretty print exceptions
+const dump = (e) => {
+  // In order of appearance
+  const cargo = ['operator', 'expected', 'actual'].map(k => `${k}: ${stringify(e[k])}`);
+
+  // Reformat stack trace, pull everything together
+  const stack = e.stack.split('\n').map(snap);
+  const block = ['---', ...cargo, 'stack:', ...stack, '...'].map(snap).join('\n');
+
+  echo(block);
+};
+
 // Set stats, present outcome
-const tick = tag => (x) => {
-  gains += x ? 0 : 1;
+const tick = hint => (x) => {
+  // Would have liked to have used `x instanceof Error`,
+  // but see for example https://github.com/mrdoob/three.js/issues/5886
+  const lost = x && x.stack && x.message;
+
+  gains += lost ? 0 : 1;
   tests += 1;
 
-  line(tag, x);
+  roll(hint, lost);
 
-  return !x
+  if (lost) {
+    dump(x);
+  }
+
+  return !lost
 };
 
 // Tapify asserts
-const tape = (jack = v => v, size = jack && jack.length) => (...args) => {
+const tape = (jack = v => v, l) => (...args) => {
+  const size = l || (jack && jack.length);
+  const name = (jack && jack.name) || '(anon)';
+
   // Attempt at extracting a description for given assert
   const mark = Math.max(size - 1, 0);
-  const name = mark < args.length ? args[mark] : jack.name;
-  const next = tick(name);
+  const hint = mark < args.length ? args[mark] : name;
+  const next = tick(hint);
 
   // Name test case using first argument past description
   const head = size < args.length && mark && args[size];
@@ -103,14 +110,15 @@ const tape = (jack = v => v, size = jack && jack.length) => (...args) => {
   // Always
   boot(head);
 
-  // Failed maybe
-  let notOk = false;
+  let score;
 
   try {
-    jack(...args);
-  } catch (e) { notOk = e; }
+    score = jack(...args);
+  } catch (e) {
+    score = e;
+  }
 
-  return next(notOk)
+  return next(score)
 };
 
 exports.stat = stat;
