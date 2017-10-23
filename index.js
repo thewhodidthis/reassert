@@ -102,7 +102,7 @@ const tape = (jack = v => v, l) => (...args) => {
   // Attempt at extracting a description for given assert
   const mark = Math.max(size - 1, 0);
   const hint = mark < args.length ? args[mark] : name;
-  const next = tick(hint);
+  const next = tick(hint || name);
 
   // Name test case using first argument past description
   const head = size < args.length && mark && args[size];
