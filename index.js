@@ -12,8 +12,8 @@ const { log: echo } = console;
 let tests = 0;
 let gains = 0;
 
-// First run maybe
-let asleep = true;
+// Skip header if false
+let firstRunMaybe = true;
 
 // Left pad helper
 const snap = t => `  ${t}`;
@@ -21,8 +21,8 @@ const snap = t => `  ${t}`;
 // Start here
 const boot = (head) => {
   // Let first run carry the banner
-  if (!tests && asleep) {
-    asleep = echo('TAP version 13');
+  if (!tests && firstRunMaybe) {
+    firstRunMaybe = echo('TAP version 13');
   }
 
   // Prepend test title if need be
