@@ -5,122 +5,103 @@ Object.defineProperty(exports, '__esModule', { value: true });
 // # Tapeling
 // TAP utils for sleepyheads
 
-const { stringify } = JSON;
-const { log: echo } = console;
+const padLeft = message => `  ${message}`;
+const { log } = console;
 
-// Stats
-let tests = 0;
-let gains = 0;
+// Format error yaml
+const getErrorBlock = (error) => {
+  const scoop = ['operator', 'expected', 'actual'].map(k => `${k}: ${JSON.stringify(error[k])}`);
+  const stack = error.stack.split('\n').map(padLeft);
 
-// Skip header if false
-let firstRunMaybe = true;
-
-// Left pad helper
-const snap = t => `  ${t}`;
-
-// Start here
-const boot = (head) => {
-  // Let first run carry the banner
-  if (!tests && firstRunMaybe) {
-    firstRunMaybe = echo('TAP version 13');
-  }
-
-  // Prepend test title if need be
-  if (head) {
-    echo('# %s', head);
-  }
+  return ['---', ...scoop, 'stack:', ...stack, '...'].map(padLeft).join('\n')
 };
 
-const stat = () => ({ tests, gains, flops: tests ? tests - gains : 1 });
+// Conditionally log message
+const echo = (template, message) => (message ? echo(log(template, message)) : echo);
 
-// Sum up
-const bill = (code) => {
-  const { flops } = stat();
+// Collect stats
+const data = { test: 0, pass: 0, fail: 0, skip: 0 };
 
-  // Header maybe
-  boot();
+// Show only once
+Object.defineProperty(data, 'head', {
+  configurable: true,
+  get() {
+    return this.test ? '' : 'TAP version 13'
+  }
+});
 
-  // Drop out maybe
-  if (code) {
-    echo('Bail out! Exit with code %d', code);
+const exit = (exitCode) => {
+  // Print the bill
+  echo('%s', data.head);
+  echo('\n1..%d', data.test);
+
+  if (exitCode) {
+    echo('Bail out! Exit with code %s', exitCode);
   } else {
-    echo('');
-    echo('1..%d', tests);
-    echo('# tests %d', tests);
+    echo('# tests %d', data.test);
+    echo('# pass  %d', data.pass);
+    echo('# fail  %d', data.fail);
+    echo('# skip  %d', data.skip);
+  }
 
-    if (gains > 0) {
-      echo('# pass  %d', gains);
+  // Reset
+  data.test = data.pass = data.fail = data.skip = 0;
+};
+
+const tape = (assert = v => v) => ({
+  // Collect testline specifics
+  describe(message, ...rest) {
+    data.description = message;
+    data.diagnostics = rest;
+
+    return this
+  },
+  exit,
+  tape,
+  // Process testline
+  test(...assertion) {
+    let errorBlock;
+
+    try {
+      assert(...assertion);
+    } catch (x) {
+      errorBlock = getErrorBlock(x);
     }
 
-    if (flops > 0) {
-      echo('# fail  %d', flops);
+    const { description = (assert && assert.name) || '(anon)', diagnostics = [] } = data;
+
+    // Print header maybe
+    echo('%s', data.head);
+
+    // Print testline
+    echo(`${errorBlock ? 'not ' : ''}ok ${data.test} - %s`, description);
+
+    // Add error yaml
+    echo('%s', errorBlock);
+
+    // Add diagnostics
+    for (const item of diagnostics) {
+      echo('# %s', item);
     }
+
+    // Look for directives
+    const skip = description.search(/# skip/i) >= 0;
+    const todo = description.search(/# todo/i) >= 0;
+
+    // Update totals
+    data.skip += skip ? 1 : 0;
+    data.fail += skip || todo || !errorBlock ? 0 : 1;
+    data.pass += skip || errorBlock ? 0 : 1;
+    data.test += 1;
+
+    // Reset
+    delete data.diagnostics;
+    delete data.description;
+    delete data.head;
+
+    return this
   }
-};
+});
 
-// Log results for each assert
-const roll = (hint, lost) => {
-  // Hit or miss
-  echo(`${lost ? 'not ' : ''}ok %d - %s`, tests, hint);
-};
-
-// Pretty print exceptions
-const dump = (e) => {
-  // In order of appearance
-  const cargo = ['operator', 'expected', 'actual'].map(k => `${k}: ${stringify(e[k])}`);
-
-  // Reformat stack trace, pull everything together
-  const stack = e.stack.split('\n').map(snap);
-  const block = ['---', ...cargo, 'stack:', ...stack, '...'].map(snap).join('\n');
-
-  echo(block);
-};
-
-// Set stats, present outcome
-const tick = hint => (x) => {
-  // Would have liked to have used `x instanceof Error`,
-  // but see for example https://github.com/mrdoob/three.js/issues/5886
-  const lost = x && x.stack && x.message;
-
-  gains += lost ? 0 : 1;
-  tests += 1;
-
-  roll(hint, lost);
-
-  if (lost) {
-    dump(x);
-  }
-
-  return !lost
-};
-
-// Tapify asserts
-const tape = (jack = v => v, l) => (...args) => {
-  const size = l || (jack && jack.length);
-  const name = (jack && jack.name) || '(anon)';
-
-  // Attempt at extracting a description for given assert
-  const mark = Math.max(size - 1, 0);
-  const hint = mark < args.length ? args[mark] : name;
-  const next = tick(hint || name);
-
-  // Name test case using first argument past description
-  const head = size < args.length && mark && args[size];
-
-  // Always
-  boot(head);
-
-  let score;
-
-  try {
-    score = jack(...args);
-  } catch (e) {
-    score = e;
-  }
-
-  return next(score)
-};
-
-exports.stat = stat;
-exports.bill = bill;
+exports.exit = exit;
 exports.tape = tape;
