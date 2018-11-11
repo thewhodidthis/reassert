@@ -15,7 +15,7 @@ test
   .test(true)
   .describe('fails on purpose')
   .test(undefined)
-  .describe('# SKIP get\'s ignored', 'Failed, but doesn\'t count')
+  .describe('# SKIP gets ignored', 'Failed, but doesn\'t count')
   .test(false)
   // No effect
   .exit()
