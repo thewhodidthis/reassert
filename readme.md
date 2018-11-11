@@ -8,7 +8,7 @@ npm i thewhodidthis/tapeling
 
 ### Usage
 ```js
-import { tape, bill } from 'tapeling'
+import { tape } from 'tapeling'
 
 const equal = tape((a, b, msg) => {
   const ok = Object.is(a, b)
@@ -20,12 +20,14 @@ const equal = tape((a, b, msg) => {
   return ok
 })
 
-// Passes
-equal(2, 2, 'is equal', 'will compute')
-
-// Throws
-equal(2, 3, 'is equal')
-
-// Report
-bill()
+equal
+    // Name test case, add diagnostic
+    .describe('is equal', 'will compute')
+    // Passes
+    .test(2, 2)
+    // Throws
+    .describe('is equal')
+    .test(2, 3)
+    // Print totals
+    .exit()
 ```
