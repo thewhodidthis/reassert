@@ -1,9 +1,21 @@
 const { ok } = require('assert')
-const { tape, bill } = require('./')
-
-process.on('exit', bill)
+const { tape, exit } = require('./')
 
 const test = tape(ok)
 
-test(true, 'is true')
-test(undefined, 'fails on purpose')
+process.on('exit', exit)
+
+test
+  .describe('is true')
+  .test(true)
+  // Diagnostics attached
+  .describe('# todo failing', '#', 'don\'t count', '#')
+  .test(false)
+  .describe('# todo passing', 'bonus')
+  .test(true)
+  .describe('fails on purpose')
+  .test(undefined)
+  .describe('# SKIP get\'s ignored', 'Failed, but doesn\'t count')
+  .test(false)
+  // No effect
+  .exit()
