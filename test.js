@@ -1,20 +1,23 @@
-'use strict'
-
 const assert = require('assert')
-const { tape, bill } = require('./')
+const { tape, exit } = require('./')
 
-const ok = tape(assert)
-const eq = tape(assert.equal)
+const myTest = tape(assert.equal)
+const myThrows = tape(assert.throws)
 
-eq(typeof bill, 'function', '`bill` a function', 'exports as advertised')
-eq(typeof tape, 'function', '`tape` a function')
+myTest
+  .describe('`exit` a function', 'exports as advertised')
+  .test(typeof exit, 'function')
+  .describe('`tape` a function')
+  .test(typeof tape, 'function')
+  .test()
 
-ok(true, 'a-ok', 'will wrap')
+// Description-less (anon)
+myThrows.test(() => { throw Error })
 
-// Falsy assertions are counted as flops
-const pass = tape(undefined, 2)
-
-pass(0, 'failing', 'will default')
-pass(1, 'passing')
-
-bill()
+tape(assert)
+  .describe('a-ok', 'will wrap', 'ie. why not?')
+  .test(true)
+  .tape(undefined)
+  .describe('passing', 'done checking defaults')
+  .test()
+  .exit()
