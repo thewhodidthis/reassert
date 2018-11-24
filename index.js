@@ -27,7 +27,7 @@ const data = { test: 0, pass: 0, fail: 0, skip: 0 };
 Object.defineProperty(data, 'head', {
   configurable: true,
   get() {
-    return this.test ? '' : 'TAP version 13'
+    return this.test > 1 ? '' : 'TAP version 13'
   }
 });
 
@@ -70,6 +70,18 @@ const tape = (assert = v => v) => ({
 
     const { description = (assert && assert.name) || '(anon)', diagnostics = [] } = data;
 
+    // Look for directives
+    const descriptionContains = contains(description);
+
+    const isSkip = descriptionContains('# skip');
+    const isTodo = descriptionContains('# todo');
+
+    // Update totals
+    data.skip += isSkip ? 1 : 0;
+    data.fail += isSkip || isTodo || !errorBlock ? 0 : 1;
+    data.pass += isSkip || errorBlock ? 0 : 1;
+    data.test += 1;
+
     // Print header maybe
     echo('%s', data.head);
 
@@ -83,18 +95,6 @@ const tape = (assert = v => v) => ({
     for (const item of diagnostics) {
       echo('# %s', item);
     }
-
-    // Look for directives
-    const descriptionContains = contains(description);
-
-    const isSkip = descriptionContains('# skip');
-    const isTodo = descriptionContains('# todo');
-
-    // Update totals
-    data.skip += isSkip ? 1 : 0;
-    data.fail += isSkip || isTodo || !errorBlock ? 0 : 1;
-    data.pass += isSkip || errorBlock ? 0 : 1;
-    data.test += 1;
 
     // Reset
     delete data.diagnostics;
