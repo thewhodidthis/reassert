@@ -2,6 +2,7 @@
 // TAP utils for sleepyheads
 
 const padLeft = message => `  ${message}`
+const search = haystack => needle => haystack && haystack.search(RegExp(needle, 'i')) >= 0
 const { log } = console
 
 // Format error yaml
@@ -12,7 +13,7 @@ const getErrorBlock = (error) => {
   return ['---', ...scoop, 'stack:', ...stack, '...'].map(padLeft).join('\n')
 }
 
-// Conditionally lay message on top off template for logging
+// Conditionally lay message on top of template for logging
 const echo = (template, message) => (message ? echo(log(template, message)) : echo)
 
 // Collect stats
@@ -27,14 +28,15 @@ Object.defineProperty(data, 'head', {
 })
 
 export const exit = (exitCode) => {
-  // Print the bill
   echo('%s', data.head)
-  echo('\n1..%d', data.test)
 
   if (exitCode) {
     echo('Bail out! Exit with code %s', exitCode)
   } else {
-    echo('# tests %d', data.test)
+    if (data.test || data.head) {
+      log(`\n1..${data.test}\n# tests ${data.test}`)
+    }
+
     echo('# pass  %d', data.pass)
     echo('# fail  %d', data.fail)
     echo('# skip  %d', data.skip)
@@ -55,13 +57,13 @@ export const tape = (assert = v => v) => ({
   exit,
   tape,
   // Process testline
-  test(...assertion) {
+  test(...params) {
     let errorBlock
 
     try {
-      assert(...assertion)
-    } catch (x) {
-      errorBlock = getErrorBlock(x)
+      assert(...params)
+    } catch (error) {
+      errorBlock = getErrorBlock(error)
     }
 
     const { description = (assert && assert.name) || '(anon)', diagnostics = [] } = data
@@ -81,8 +83,10 @@ export const tape = (assert = v => v) => ({
     }
 
     // Look for directives
-    const skip = description.search(/# skip/i) >= 0
-    const todo = description.search(/# todo/i) >= 0
+    const searchDescription = search(description)
+
+    const skip = searchDescription('# skip')
+    const todo = searchDescription('# todo')
 
     // Update totals
     data.skip += skip ? 1 : 0
