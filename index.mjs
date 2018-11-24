@@ -2,7 +2,7 @@
 // TAP utils for sleepyheads
 
 const padLeft = message => `  ${message}`
-const search = haystack => needle => haystack && haystack.search(RegExp(needle, 'i')) >= 0
+const contains = text => q => text && text.search(RegExp(q, 'i')) >= 0
 const { log } = console
 
 // Format error yaml
@@ -83,15 +83,15 @@ export const tape = (assert = v => v) => ({
     }
 
     // Look for directives
-    const searchDescription = search(description)
+    const descriptionContains = contains(description)
 
-    const skip = searchDescription('# skip')
-    const todo = searchDescription('# todo')
+    const isSkip = descriptionContains('# skip')
+    const isTodo = descriptionContains('# todo')
 
     // Update totals
-    data.skip += skip ? 1 : 0
-    data.fail += skip || todo || !errorBlock ? 0 : 1
-    data.pass += skip || errorBlock ? 0 : 1
+    data.skip += isSkip ? 1 : 0
+    data.fail += isSkip || isTodo || !errorBlock ? 0 : 1
+    data.pass += isSkip || errorBlock ? 0 : 1
     data.test += 1
 
     // Reset
