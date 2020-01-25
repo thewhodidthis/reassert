@@ -21,13 +21,13 @@ const equal = tape((a, b, msg) => {
 })
 
 equal
-    // Name test case, add diagnostic
-    .describe('is equal', 'will compute')
-    // Passes
-    .test(2, 2)
-    // Throws
-    .describe('is equal')
-    .test(2, 3)
-    // Print totals
-    .exit()
+  // Name test case, add diagnostic
+  .describe('is equal', 'will compute')
+  // Passes
+  .test(2, 2)
+  // Throws
+  .describe('is equal')
+  .test(2, 3)
+  // Print totals
+  .exit()
 ```
