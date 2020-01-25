@@ -1,6 +1,6 @@
 {
   "name": "tapeling",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Helps produce TAP reports",
   "main": "index",
   "module": "index.mjs",
