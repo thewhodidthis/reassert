@@ -9,7 +9,7 @@ test
   .describe('is true')
   .test(true)
   // Diagnostics attached
-  .describe('# todo failing', '#', 'don\'t count', '#')
+  .describe('# todo failing', 'don\'t count')
   .test(false)
   .describe('# todo passing', 'bonus')
   .test(true)
