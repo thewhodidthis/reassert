@@ -2,42 +2,43 @@
   "name": "tapeling",
   "version": "1.0.6",
   "description": "Helps produce TAP reports",
-  "main": "index",
-  "module": "index.mjs",
-  "homepage": "https://github.com/thewhodidthis/tapeling#readme",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/thewhodidthis/tapeling.git"
-  },
-  "bugs": {
-    "url": "https://github.com/thewhodidthis/tapeling/issues"
-  },
-  "scripts": {
-    "pretest": "eslint test.js",
-    "test": "node test",
-    "prestart": "eslint index.mjs",
-    "start": "rollup -f cjs index.mjs > index.js",
-    "preexample": "eslint example.js",
-    "example": "node example"
-  },
-  "eslintConfig": {
-    "extends": "@thewhodidthis"
-  },
-  "engines": {
-    "node": ">=6.4.0",
-    "npm": ">=3.10.3"
-  },
-  "devDependencies": {
-    "@thewhodidthis/eslint-config": "^0.0.11",
-    "eslint": "^6.8.0",
-    "rollup": "^1.29.1"
-  },
   "keywords": [
     "tap",
     "tape",
     "test",
     "tool"
   ],
+  "homepage": "https://github.com/thewhodidthis/tapeling#readme",
+  "bugs": {
+    "url": "https://github.com/thewhodidthis/tapeling/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thewhodidthis/tapeling.git"
+  },
+  "license": "Unlicense",
   "author": "sChzs BkgNns <sotirios.bakagiannis@gmail.com> (https://www.thewhodidthis.com)",
-  "license": "Unlicense"
+  "main": "index",
+  "module": "index.mjs",
+  "scripts": {
+    "preexample": "eslint example.js",
+    "example": "node example",
+    "prestart": "eslint index.mjs",
+    "start": "rollup -f cjs index.mjs > index.js",
+    "pretest": "eslint test.js",
+    "test": "node test",
+    "posttest": "eslint package.json"
+  },
+  "eslintConfig": {
+    "extends": "@thewhodidthis"
+  },
+  "devDependencies": {
+    "@thewhodidthis/eslint-config": "^0.0.15",
+    "eslint": "^6.8.0",
+    "rollup": "^1.29.1"
+  },
+  "engines": {
+    "node": ">=6.4.0",
+    "npm": ">=3.10.3"
+  }
 }
