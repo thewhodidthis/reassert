@@ -1,12 +1,9 @@
-> Browser friendly tapification
-
-### Setup
+Browser friendly tapification,
 ```sh
-# Fetch latest from github
-npm i thewhodidthis/tapeling
+npm install tapeling --save-dev
 ```
 
-### Usage
+For example,
 ```js
 import { tape } from 'tapeling'
 
