@@ -1,10 +1,10 @@
 const assert = require('assert')
 const { tape, exit } = require('./')
 
-const myTest = tape(assert.strict.strictEqual)
+const myStrictEqual = tape(assert.strict.strictEqual)
 const myThrows = tape(assert.throws)
 
-myTest
+myStrictEqual
   .describe('`exit` a function')
   .test(typeof exit, 'function')
   .describe('`tape` a function', 'exports as advertised')
