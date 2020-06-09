@@ -1,9 +1,20 @@
-Browser friendly tapification,
+## about
+
+Helps produce browser or Node.js compatible [TAP](https://testanything.org) reports.
+
+## setup
+
+Fetch the latest stable version from the _npm_ registry:
+
 ```sh
+# Add to 'package.json' development dependencies
 npm install tapeling --save-dev
 ```
 
+## usage
+
 For example,
+
 ```js
 import { tape } from 'tapeling'
 
@@ -28,3 +39,8 @@ equal
   // Print totals
   .exit()
 ```
+
+## see also
+
+- [likewise](https://github.com/thewhodidthis/likewise)
+- [tapeless](https://github.com/thewhodidthis/tapeless)
