@@ -4,7 +4,7 @@ Helps produce [TAP](https://testanything.org) reports. Combines with [likewise](
 
 ## setup
 
-Fetch the [latest stable version](https://www.npmjs.com/package/tapeling) from the _npm_ registry:
+Download the [latest stable version](https://npm.im/tapeling) from the _npm_ registry:
 
 ```sh
 # Add to 'package.json' development dependencies
