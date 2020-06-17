@@ -1,25 +1,22 @@
 // # Tapeling
 // TAP utils for sleepyheads
 
-const padLeft = message => `  ${message}`
-const contains = text => q => text && text.search(RegExp(q, 'i')) >= 0
+// Check if text search positive
+const contains = text => query => text && text.search(RegExp(query, 'i')) >= 0
+
+// Insert two spaces to the left of input, for when printing out errors
+const pad = message => `  ${message}`
+
+// The default logger
 const { log } = console
-
-// Format error yaml
-const getErrorBlock = (error) => {
-  const scoop = ['operator', 'expected', 'actual'].map(k => `${k}: ${JSON.stringify(error[k])}`)
-  const stack = error.stack.split('\n').map(padLeft)
-
-  return ['---', ...scoop, 'stack:', ...stack, '...'].map(padLeft).join('\n')
-}
 
 // Conditionally lay message on top of template for logging
 const echo = (template, message) => (message ? echo(log(template, message)) : echo)
 
-// Collect stats
+// Collect stats mutated with each test line and reset on exit
 const data = { test: 0, pass: 0, fail: 0, skip: 0 }
 
-// Hide once a test's been called
+// Make sure TAP head only shows on first call
 Object.defineProperty(data, 'head', {
   configurable: true,
   get() {
@@ -27,6 +24,7 @@ Object.defineProperty(data, 'head', {
   }
 })
 
+// Print report, clear stats, and quit
 export const exit = (exitCode) => {
   echo('%s', data.head)
 
@@ -44,6 +42,7 @@ export const exit = (exitCode) => {
   data.test = data.pass = data.fail = data.skip = 0
 }
 
+// Contains methods for fluently describing and processing testlines
 export const tape = (assert = v => v) => ({
   // Collect testline specifics
   describe(message, ...rest) {
@@ -52,9 +51,10 @@ export const tape = (assert = v => v) => ({
 
     return this
   },
+  // Include copies of named module exports
   exit,
   tape,
-  // Process testline
+  // Process testline and update stats
   test(...params) {
     let errorBlock
 
@@ -64,18 +64,18 @@ export const tape = (assert = v => v) => ({
       errorBlock = getErrorBlock(error)
     }
 
+    // Use assertion name if no description provided, extract existing diagnostics
     const { description = (assert && assert.name) || '(anon)', diagnostics = [] } = data
 
-    // Look for directives
+    // Look for directives for items to exclude from vitals
     const descriptionContains = contains(description)
-
-    const isSkip = descriptionContains('# skip')
-    const isTodo = descriptionContains('# todo')
+    const skip = descriptionContains('# skip')
+    const todo = descriptionContains('# todo')
 
     // Update totals
-    data.skip += isSkip ? 1 : 0
-    data.fail += isSkip || isTodo || !errorBlock ? 0 : 1
-    data.pass += isSkip || errorBlock ? 0 : 1
+    data.skip += skip ? 1 : 0
+    data.fail += skip || todo || !errorBlock ? 0 : 1
+    data.pass += skip || errorBlock ? 0 : 1
     data.test += 1
 
     // Print header maybe
@@ -100,3 +100,11 @@ export const tape = (assert = v => v) => ({
     return this
   }
 })
+
+// Format error yaml
+function getErrorBlock(error) {
+  const scoop = ['operator', 'expected', 'actual'].map(k => `${k}: ${JSON.stringify(error[k])}`)
+  const stack = error.stack.split('\n').map(pad)
+
+  return ['---', ...scoop, 'stack:', ...stack, '...'].map(pad).join('\n')
+}
