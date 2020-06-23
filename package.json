@@ -22,11 +22,11 @@
   "module": "index.mjs",
   "scripts": {
     "preexample": "eslint example.js",
-    "example": "node example",
+    "example": "node example.js",
     "prestart": "eslint index.mjs",
     "start": "rollup -f cjs -o index.js index.mjs",
     "pretest": "eslint test.js",
-    "test": "node test"
+    "test": "node test.js"
   },
   "eslintConfig": {
     "extends": "@thewhodidthis"
