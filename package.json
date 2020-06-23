@@ -19,7 +19,11 @@
   "license": "ISC",
   "author": "Sotiri Bakagiannis <sotirios.bakagiannis@gmail.com> (http://thewhodidthis.com)",
   "type": "module",
-  "main": "index",
+  "exports": {
+    "import": "./index.js",
+    "require": "./index.cjs"
+  },
+  "main": "./index.cjs",
   "scripts": {
     "preexample": "eslint example.cjs",
     "example": "node example.cjs",
@@ -33,7 +37,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@thewhodidthis/eslint-config": "^0.1.6",
+    "@thewhodidthis/eslint-config": "^0.1.7",
     "eslint": "^7.3.1",
     "rollup": "^2.18.0"
   },
