@@ -1,7 +1,7 @@
 'use strict'
 
 const assert = require('assert')
-const { tape, exit } = require('./')
+const { tape, exit } = require('./index.cjs')
 
 const tapeStrictEqual = tape(assert.strict.strictEqual)
 
