@@ -1,19 +1,23 @@
+'use strict'
+
 const assert = require('assert')
 const { tape, exit } = require('./index.cjs')
 
-const myStrictEqual = tape(assert.strict.strictEqual)
-const myThrows = tape(assert.throws)
+const tapeStrictEqual = tape(assert.strict.strictEqual)
 
-myStrictEqual
+tapeStrictEqual
   .describe('`exit` a function')
   .test(typeof exit, 'function')
   .describe('`tape` a function', 'exports as advertised')
   .test(typeof tape, 'function')
   .test(2, 2)
 
-// Description-less (anon)
-myThrows.test(() => { throw Error })
+const tapeThrows = tape(assert.throws)
 
+// Description-less (anon)
+tapeThrows.test(() => { throw Error })
+
+// Wrap whole of built in assertions module
 tape(assert)
   .describe('a-ok', 'will wrap')
   .test(true)
