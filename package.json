@@ -19,14 +19,14 @@
   "license": "ISC",
   "author": "Sotiri Bakagiannis <sotirios.bakagiannis@gmail.com> (http://thewhodidthis.com)",
   "main": "index",
-  "module": "index.mjs",
+  "type": "module",
   "scripts": {
-    "preexample": "eslint example.js",
-    "example": "node example.js",
-    "prestart": "eslint index.mjs",
-    "start": "rollup -f cjs -o index.js index.mjs",
-    "pretest": "eslint test.js",
-    "test": "node test.js"
+    "preexample": "eslint example.cjs",
+    "example": "node example.cjs",
+    "prestart": "eslint index.js",
+    "start": "rollup -f cjs -o index.cjs index.js",
+    "pretest": "eslint test.cjs",
+    "test": "node test.cjs"
   },
   "eslintConfig": {
     "extends": "@thewhodidthis"

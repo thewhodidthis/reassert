@@ -1,5 +1,5 @@
 const assert = require('assert')
-const { tape, exit } = require('./')
+const { tape, exit } = require('./index.cjs')
 
 const myStrictEqual = tape(assert.strict.strictEqual)
 const myThrows = tape(assert.throws)

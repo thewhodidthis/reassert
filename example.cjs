@@ -1,5 +1,5 @@
 const { ok } = require('assert')
-const { tape, exit } = require('./')
+const { tape, exit } = require('./index.cjs')
 
 const test = tape(ok)
 
