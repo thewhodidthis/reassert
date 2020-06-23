@@ -18,8 +18,8 @@
   },
   "license": "ISC",
   "author": "Sotiri Bakagiannis <sotirios.bakagiannis@gmail.com> (http://thewhodidthis.com)",
-  "main": "index",
   "type": "module",
+  "main": "index",
   "scripts": {
     "preexample": "eslint example.cjs",
     "example": "node example.cjs",
