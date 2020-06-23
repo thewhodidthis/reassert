@@ -23,7 +23,7 @@
     "import": "./index.js",
     "require": "./index.cjs"
   },
-  "main": "./index.cjs",
+  "main": "index",
   "scripts": {
     "preexample": "eslint example.cjs",
     "example": "node example.cjs",
