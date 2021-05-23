@@ -1,7 +1,5 @@
-'use strict'
-
-const assert = require('assert')
-const { tape, exit } = require('./index.cjs')
+import assert from 'assert'
+import { tape, exit } from './main.js'
 
 const tapeStrictEqual = tape(assert.strict.strictEqual)
 

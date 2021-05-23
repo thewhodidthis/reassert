@@ -1,5 +1,5 @@
-const { ok } = require('assert')
-const { tape, exit } = require('./index.cjs')
+import { ok } from 'assert'
+import { tape, exit } from './main.js'
 
 const test = tape(ok)
 
