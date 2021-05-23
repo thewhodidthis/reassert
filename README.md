@@ -37,7 +37,7 @@ function throwsIfDifferent(a, b, message = 'Sorry!') {
 Wrap with `tape()` and call `exit()` to print out the corresponding TAP report. For example,
 
 ```js
-const { tape, exit } = require('tapeling')
+import { tape, exit } from 'tapeling'
 
 const test = throwsIfDifferent
 const assert = tape(test)
