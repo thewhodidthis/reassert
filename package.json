@@ -22,19 +22,8 @@
   "exports": "./main.js",
   "main": "./main.js",
   "scripts": {
-    "preexample": "eslint example.js",
-    "example": "node example.js",
-    "prestart": "eslint main.js",
-    "start": "npm run example",
-    "pretest": "eslint test.js",
+    "start": "node example.js",
     "test": "node test.js"
-  },
-  "eslintConfig": {
-    "extends": "@thewhodidthis"
-  },
-  "devDependencies": {
-    "@thewhodidthis/eslint-config": "^1.0.2",
-    "eslint": "^7.27.0"
   },
   "engines": {
     "node": ">=14.17.0",
