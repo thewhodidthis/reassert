@@ -1,21 +1,21 @@
-import { ok } from 'assert'
-import { tape, exit } from './main.js'
+import { ok } from "assert"
+import { exit, tape } from "tapeling"
 
 const test = tape(ok)
 
-process.on('exit', exit)
+process.on("exit", exit)
 
 test
-  .describe('is true')
+  .describe("is true")
   .test(true)
   // Diagnostics attached
-  .describe('# todo failing', 'don\'t count')
+  .describe("# todo failing", "don't count")
   .test(false)
-  .describe('# todo passing', 'bonus')
+  .describe("# todo passing", "bonus")
   .test(true)
-  .describe('fails on purpose')
+  .describe("fails on purpose")
   .test(undefined)
-  .describe('# SKIP gets ignored', 'Failed, but doesn\'t count')
+  .describe("# SKIP gets ignored", "Failed, but doesn't count")
   .test(false)
   // No effect
   .exit()
