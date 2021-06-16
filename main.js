@@ -2,7 +2,7 @@
 // TAP utils for sleepyheads
 
 // Check if text search positive
-const contains = text => query => text && text.search(RegExp(query, 'i')) >= 0
+const contains = text => query => text && text.search(RegExp(query, "i")) >= 0
 
 // Insert two spaces to the left of input, for when printing out errors
 const pad = message => `  ${message}`
@@ -17,25 +17,25 @@ const echo = (template, message) => (message ? echo(log(template, message)) : ec
 const data = { test: 0, pass: 0, fail: 0, skip: 0 }
 
 // Make sure TAP head only shows on first call
-Object.defineProperty(data, 'head', {
+Object.defineProperty(data, "head", {
   configurable: true,
   get() {
-    return this.test > 1 ? '' : 'TAP version 13'
-  }
+    return this.test > 1 ? "" : "TAP version 13"
+  },
 })
 
 // Print report, clear stats, and quit
 export const exit = (exitCode) => {
-  echo('%s', data.head)
+  echo("%s", data.head)
 
   if (exitCode) {
-    echo('Bail out! Exit with code %s', exitCode)
+    echo("Bail out! Exit with code %s", exitCode)
   } else {
     if (data.test || data.head) {
       log(`\n1..${data.test}\n# tests ${data.test}`)
     }
 
-    ['pass', 'fail', 'skip'].forEach(k => echo(`# ${k}  %d`, data[k]))
+    ["pass", "fail", "skip"].forEach(k => echo(`# ${k}  %d`, data[k]))
   }
 
   // Reset
@@ -65,12 +65,12 @@ export const tape = (assert = v => v) => ({
     }
 
     // Use assertion name if no description provided, extract existing diagnostics
-    const { description = (assert && assert.name) || '(anon)', diagnostics = [] } = data
+    const { description = (assert && assert.name) || "(anon)", diagnostics = [] } = data
 
     // Look for directives for items to exclude from vitals
     const descriptionContains = contains(description)
-    const skip = descriptionContains('# skip')
-    const todo = descriptionContains('# todo')
+    const skip = descriptionContains("# skip")
+    const todo = descriptionContains("# todo")
 
     // Update totals
     data.skip += skip ? 1 : 0
@@ -79,17 +79,17 @@ export const tape = (assert = v => v) => ({
     data.test += 1
 
     // Print header maybe
-    echo('%s', data.head)
+    echo("%s", data.head)
 
     // Print testline
-    echo(`${errorBlock ? 'not ' : ''}ok ${data.test} - %s`, description)
+    echo(`${errorBlock ? "not " : ""}ok ${data.test} - %s`, description)
 
     // Add error yaml
-    echo('%s', errorBlock)
+    echo("%s", errorBlock)
 
     // Add diagnostics
     for (const item of diagnostics) {
-      echo('# %s', item)
+      echo("# %s", item)
     }
 
     // Reset
@@ -98,13 +98,13 @@ export const tape = (assert = v => v) => ({
     delete data.head
 
     return this
-  }
+  },
 })
 
 // Format error yaml
 function getErrorBlock(error) {
-  const scoop = ['operator', 'expected', 'actual'].map(k => `${k}: ${JSON.stringify(error[k])}`)
-  const stack = error.stack.split('\n').map(pad)
+  const scoop = ["operator", "expected", "actual"].map(k => `${k}: ${JSON.stringify(error[k])}`)
+  const stack = error.stack.split("\n").map(pad)
 
-  return ['---', ...scoop, 'stack:', ...stack, '...'].map(pad).join('\n')
+  return ["---", ...scoop, "stack:", ...stack, "..."].map(pad).join("\n")
 }
