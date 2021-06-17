@@ -1,6 +1,6 @@
 ## about
 
-Helps gather [TAP](https://testanything.org) reports. Combines with [likewise](https://npm.im/likewise) in [tapeless](https://npm.im/tapeless) for Node.js, Deno, or browser-side testing.
+Helps gather [TAP](https://testanything.org) reports. Combines with [likewise](https://npm.im/likewise) in [tapeless](https://npm.im/tapeless) for Node.js, or browser-side testing.
 
 ## setup
 
