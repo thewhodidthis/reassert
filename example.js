@@ -1,9 +1,10 @@
-import { ok } from "assert"
+import process from "process"
+import assert from "assert"
 import { exit, tape } from "tapeling"
 
-const test = tape(ok)
-
 process.on("exit", exit)
+
+const test = tape(assert.ok)
 
 test
   .describe("is true")
