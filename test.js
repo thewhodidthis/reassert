@@ -8,11 +8,12 @@ tapeStrictEqual
   .test(typeof exit, "function")
   .describe("`tape` a function", "exports as advertised")
   .test(typeof tape, "function")
+  .describe(null, "description defaults to assertion name")
   .test(2, 2)
 
 const tapeThrows = tape(assert.throws)
 
-// Description-less (anon)
+// Description-less
 tapeThrows.test(() => {
   throw Error
 })
