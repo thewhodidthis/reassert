@@ -1,5 +1,5 @@
-import process from "process"
 import assert from "assert"
+import process from "process"
 import { exit, tape } from "tapeling"
 
 process.on("exit", exit)
