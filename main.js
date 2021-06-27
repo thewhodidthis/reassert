@@ -35,7 +35,9 @@ export const exit = (exitCode) => {
       log(`\n1..${data.test}\n# tests ${data.test}`)
     }
 
-    ["pass", "fail", "skip"].forEach(k => echo(`# ${k}  %d`, data[k]))
+    for (const k of ["pass", "fail", "skip"]) {
+      echo(`# ${k}  %d`, data[k])
+    }
   }
 
   // Reset
