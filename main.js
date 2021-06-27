@@ -65,7 +65,8 @@ export const tape = (assert = v => v) => ({
     }
 
     // Use assertion name if no description provided, extract existing diagnostics
-    const { description = (assert && assert.name) || "(anon)", diagnostics = [] } = data
+    const description = data.description ?? (assert?.name || "(anon)")
+    const diagnostics = data.diagnostics ?? []
 
     // Look for directives for items to exclude from vitals
     const descriptionContains = contains(description)
