@@ -1,6 +1,6 @@
 ## about
 
-Helps gather [TAP](https://testanything.org) reports. Combines with [likewise](https://npm.im/likewise) in [tapeless](https://npm.im/tapeless) for Node.js, or browser-side testing.
+Helps gather [TAP](https://testanything.org) reports. Combines with [likewise](https://npm.im/likewise) in [tapeless](https://npm.im/tapeless) for basic unit testing.
 
 ## setup
 
@@ -84,6 +84,35 @@ ok 2 - is same
 # tests 2
 # pass  1
 # fail  1
+```
+
+In Node.js all of [`assert`](https://nodejs.org/api/assert.html) may be wrapped a-la [tapjs/tapsert](https://github.com/tapjs/tapsert) making a range of involved checks available. For example,
+
+```js
+import axxert from "assert"
+import process from "process"
+import { exit, tape } from "tapeling"
+
+// Print out results once the script is done
+process.on("exit", exit)
+
+const assert = tape(axxert)
+
+for (const x in axxert) {
+  if (x !== "CallTracker" || x !== "AssertionError") {
+    assert[x] = tape(axxert[x])
+  }
+}
+
+/*
+TAP version 13
+ok 1 - ok
+
+1..1
+# tests 1
+# pass  1
+*/
+assert.test(typeof assert, "function")
 ```
 
 ## see also
