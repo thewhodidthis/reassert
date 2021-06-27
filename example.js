@@ -1,6 +1,6 @@
 import assert from "assert"
 import process from "process"
-import { exit, tape } from "tapeling"
+import { exit, tape } from "./main.js"
 
 process.on("exit", exit)
 

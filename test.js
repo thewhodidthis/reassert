@@ -1,5 +1,5 @@
 import assert from "assert"
-import { exit, tape } from "tapeling"
+import { exit, tape } from "./main.js"
 
 const tapeStrictEqual = tape(assert.strict.strictEqual)
 
